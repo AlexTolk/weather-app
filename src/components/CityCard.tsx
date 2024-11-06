@@ -1,5 +1,3 @@
-// src/components/CityCard.tsx
-
 import React, { useEffect, useState } from 'react';
 import { Card, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -23,12 +21,10 @@ const CityCard: React.FC<CityCardProps> = ({ city }) => {
       try {
         setLoading(true);
 
-        // Step 1: Fetch coordinates of the city
         const coordResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}`);
         const coordData = await coordResponse.json();
         const { latitude, longitude } = coordData.results[0];
 
-        // Step 2: Fetch current weather based on coordinates
         const weatherResponse = await fetch(
           `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&windspeed_unit=ms`
         );
@@ -50,7 +46,6 @@ const CityCard: React.FC<CityCardProps> = ({ city }) => {
     fetchWeather();
   }, [city]);
 
-  // Helper function to translate weather code
   const translateWeatherCode = (code: number) => {
     const weatherInterpretation: { [key: number]: string } = {
       0: "Clear Sky",
@@ -86,7 +81,7 @@ const CityCard: React.FC<CityCardProps> = ({ city }) => {
   };
 
   return (
-    <Card style={{ width: '18rem' }}>
+    <Card style={{ width: '20rem' }}>
       <Card.Body>
         <Card.Title>{city}</Card.Title>
         {loading ? (
@@ -100,9 +95,13 @@ const CityCard: React.FC<CityCardProps> = ({ city }) => {
             <Card.Text>Wind Speed: {weatherData?.windSpeed} m/s</Card.Text>
           </>
         )}
-        <Link to={`/weather/${city}`} className="btn btn-primary">
-          View Forecast
-        </Link>
+        {loading ? (
+            <span>Loading...</span>
+        ) : (
+            <>
+                <Link to={`/weather/${city}`} className="btn btn-primary"> View Forecast </Link>
+            </>
+        )}
       </Card.Body>
     </Card>
   );

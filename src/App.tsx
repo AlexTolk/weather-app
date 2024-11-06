@@ -1,8 +1,7 @@
-// src/App.tsx
-
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
+import AutocompleteInput from './components/AutocompleteInput';
 import CityCard from './components/CityCard';
 import WeatherForecast from './components/WeatherForecast';
 
@@ -23,9 +22,11 @@ const App: React.FC = () => {
   return (
     <Router>
       <Container className="my-4">
-        <h1>Weather Dashboard</h1>
+        <Row className='mb-5'>
+          <h1>Weather Dashboard</h1>
+          <AutocompleteInput />
+        </Row>
         <Routes>
-          {/* Main Page */}
           <Route
             path="/"
             element={
@@ -39,7 +40,6 @@ const App: React.FC = () => {
             }
           />
 
-          {/* Forecast Page */}
           <Route path="/weather/:city" element={<WeatherForecast />} />
         </Routes>
       </Container>

@@ -1,5 +1,3 @@
-// src/components/WeatherForecast.tsx
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Table, Spinner } from 'react-bootstrap';
@@ -21,18 +19,15 @@ const WeatherForecast: React.FC = () => {
       try {
         setLoading(true);
 
-        // Step 1: Get city coordinates
         const coordResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}`);
         const coordData = await coordResponse.json();
         const { latitude, longitude } = coordData.results[0];
 
-        // Step 2: Fetch forecast data based on coordinates
         const forecastResponse = await fetch(
           `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_min,temperature_2m_max,weathercode&timezone=GMT`
         );
         const forecastData = await forecastResponse.json();
 
-        // Step 3: Process the forecast data
         const days = forecastData.daily.time.map((date: string, index: number) => ({
           date,
           temp_min: forecastData.daily.temperature_2m_min[index],
@@ -50,7 +45,6 @@ const WeatherForecast: React.FC = () => {
     fetchForecast();
   }, [city]);
 
-  // Helper function to translate weather code
   const translateWeatherCode = (code: number) => {
     const weatherInterpretation: { [key: number]: string } = {
       0: "Clear Sky",
@@ -86,9 +80,9 @@ const WeatherForecast: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className='d-flex flex-column align-center'>
       <h2>7-Day Weather Forecast for {city}</h2>
-      <Link to="/" className="btn btn-secondary mb-3">Back to Main</Link>
+      <Link to="/">Back to Main</Link>
 
       {loading ? (
         <Spinner animation="border" role="status">
